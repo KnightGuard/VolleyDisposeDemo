@@ -36,7 +36,7 @@ import java.util.Map;
 /**
  * Created by 斌斌 on 2015/10/15.
  */
-public class FirstFragment extends Fragment {
+public class FirstFragment extends Fragment implements ResponseSuccess{
     private View view;
     private RecyclerView listView;
     private List<Item> lvs=new ArrayList<>();
@@ -81,17 +81,7 @@ public class FirstFragment extends Fragment {
         progressBar.setVisibility(View.VISIBLE);
         Map<String,String> map=new HashMap<>();
         map.put("num",""+num);
-        VolleyApplication.getInstance().getHttpUtils(new ResponseSuccess() {
-            @Override
-            public void Success(String s, Integer mode) throws JSONException {
-
-            }
-
-            @Override
-            public void Error() {
-
-            }
-        }).get(URL, 1, map);
+        VolleyApplication.getInstance().getHttpUtils(this).get(URL, 1, map);
     }
 
 
