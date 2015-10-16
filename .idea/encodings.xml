@@ -8,6 +8,8 @@
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/vollryhttpdemo/VolleyApplication.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/vollryhttpdemo/adapter/ApplicationAdapter.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/vollryhttpdemo/custom/CustomToast.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/vollryhttpdemo/custom/itemanimator/CustomItemAnimator.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/vollryhttpdemo/custom/itemanimator/ReboundItemAnimator.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/vollryhttpdemo/utils/DeviceUuid.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/vollryhttpdemo/utils/DialogUtils.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/vollryhttpdemo/utils/HttpUtils.java" charset="UTF-8" />

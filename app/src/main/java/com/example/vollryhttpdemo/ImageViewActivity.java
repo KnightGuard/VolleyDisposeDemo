@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
@@ -11,54 +12,92 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.example.vollryhttpdemo.custom.TouchImageView;
+import com.example.vollryhttpdemo.model.GroupImage;
+import com.example.vollryhttpdemo.utils.Contants;
+import com.example.vollryhttpdemo.utils.HttpUtils;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-public class ImageViewActivity extends BaseActivity {
+public class ImageViewActivity extends BaseActivity implements HttpUtils.ResponseSuccess {
 
 	private ArrayList<String> imgList = new ArrayList<>();
 	private ViewPager imgPager;
     private int index=0;
-    private ProgressBar bar;
+//    private ProgressBar bar;
 	private static final int SCALE_DELAY = 30;
 	private RelativeLayout mRowContainer;
+	private ImageAdapter adapter;
 
 	@Override
 	protected void loadView() {
 		index=getIntent().getIntExtra("index",0);
 		setContentView(R.layout.image_view);
-		toolbar = (Toolbar) findViewById(R.id.tl_custom);
-		toolbar.setTitle("");
-		setSupportActionBar(toolbar);
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		// Handle Back Navigation :D
-		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				ImageViewActivity.this.onBackPressed();
-			}
-		});
-
-		Intent intent = super.getIntent();
-		imgList = new ArrayList<>();
-		imgList = intent.getStringArrayListExtra("imgList");
+		initToolbar();
 		imgPager = (ViewPager) findViewById(R.id.imgPager);
-		imgPager.setAdapter(new ImageAdapter());
+		adapter=new ImageAdapter();
+		imgPager.setAdapter(adapter);
 		imgPager.setCurrentItem(index);
-
-		bar= (ProgressBar) findViewById(R.id.progressBar);
 		mRowContainer= (RelativeLayout) findViewById(R.id.row_container);
+		getBelleImagesDetails();
+	}
+
+	@Override
+	public void Success(String s, Integer mode) throws JSONException {
+		switch (mode){
+			case 1:
+				initDate(s);
+				break;
+		}
+	}
+
+	@Override
+	public void Error() {
+
+	}
+
+	/**
+	 * 处理返回数据
+	 * @param s
+	 * @throws JSONException
+	 */
+	private void initDate(final String s) throws JSONException {
+		Log.i("main","图片详情"+s);
+		JSONObject objectString = new JSONObject(s);
+		JSONArray array=objectString.getJSONArray("list");
+		imgList = new ArrayList<>();
+		for (int i = 0; i < array.length(); i++) {
+			imgList.add(array.getJSONObject(i).getString("src"));
+		}
+		adapter.notifyDataSetChanged();
+
+	}
+	/**
+	 * 拿到开放api的美女图片详情
+	*/
+	private void getBelleImagesDetails(){
+		Map<String,String> map=new HashMap<>();
+		map.put("id",getIntent().getStringExtra("id"));
+		VolleyApplication.getInstance().getHttpUtils(this).get(Contants.IMAGE_NEW_SHOW, 1, map);
+
 	}
 
 	private class ImageAdapter extends PagerAdapter {
@@ -74,18 +113,17 @@ public class ImageViewActivity extends BaseActivity {
 
 		@Override
 		public Object instantiateItem(ViewGroup container, int position) {
-
 			String url = imgList.get(position);
-			TouchImageView img = new TouchImageView(ImageViewActivity.this);
-			VolleyApplication.getInstance().settingImg(url, img,bar);
-			img.setOnClickListener(new OnClickListener() {
+			View view= LayoutInflater.from(ImageViewActivity.this).inflate(R.layout.details_item, null);
+			VolleyApplication.getInstance().settingImg(Contants.PREFIX+url, (TouchImageView)view.findViewById(R.id.image), (ProgressBar) view.findViewById(R.id.progressBar));
+			view.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					ImageViewActivity.this.onBackPressed();
 				}
 			});
-			 container.addView(img, 0);
-			return img;
+			 container.addView(view, 0);
+			return view;
 		}
 
 		@Override
@@ -94,8 +132,22 @@ public class ImageViewActivity extends BaseActivity {
 		}
 	}
 	/**
-	 * animate the views if we close the activity
+	 * 初始化Toolbar
 	 */
+	private void initToolbar(){
+		toolbar = (Toolbar) findViewById(R.id.tl_custom);
+		toolbar.setTitle("");
+		setSupportActionBar(toolbar);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setHomeButtonEnabled(true); //设置返回键可用
+		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				ImageViewActivity.this.onBackPressed();
+			}
+		});
+	}
+
 	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 	@Override
 	public void onBackPressed() {

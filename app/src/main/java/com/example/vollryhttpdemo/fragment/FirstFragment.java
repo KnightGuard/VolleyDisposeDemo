@@ -7,23 +7,26 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.example.vollryhttpdemo.ImageViewActivity;
 import com.example.vollryhttpdemo.R;
 import com.example.vollryhttpdemo.VolleyApplication;
 import com.example.vollryhttpdemo.adapter.ApplicationAdapter;
-import com.example.vollryhttpdemo.adapter.FirestAdpater;
+import com.example.vollryhttpdemo.custom.itemanimator.CustomItemAnimator;
+import com.example.vollryhttpdemo.custom.itemanimator.ReboundItemAnimator;
+import com.example.vollryhttpdemo.model.GroupImage;
+import com.example.vollryhttpdemo.utils.Contants;
 import com.example.vollryhttpdemo.utils.HttpUtils.ResponseSuccess;
-import com.example.vollryhttpdemo.model.Item;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,28 +42,39 @@ import java.util.Map;
 public class FirstFragment extends Fragment implements ResponseSuccess{
     private View view;
     private RecyclerView listView;
-    private List<Item> lvs=new ArrayList<>();
-//    private FirestAdpater adapter;
+    private List<GroupImage> lvs=new ArrayList<>();
     private ApplicationAdapter mAdapter;
-    private String URL="http://apis.baidu.com/txapi/mvtp/meinv";
-    private int num=10;
+    private int num=1;
     private ProgressBar progressBar;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view=inflater.inflate(R.layout.activity_first,null);
         listView= (RecyclerView) view.findViewById(R.id.first_list);
-//        adapter = new FirestAdpater(getActivity(), R.layout.first_item);
         listView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mAdapter = new ApplicationAdapter(new ArrayList<Item>(), R.layout.first_item, this);
+        mSwipeRefreshLayout= (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+        mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.theme_default_primary));
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                num = 1;
+                getBelleImages();
+            }
+        });
+        mAdapter = new ApplicationAdapter(new ArrayList<GroupImage>(), R.layout.first_item, this);
         listView.setAdapter(mAdapter);
+        listView.setItemAnimator(new CustomItemAnimator());
+        listView.setItemAnimator(new ReboundItemAnimator());
         progressBar= (ProgressBar) view.findViewById(R.id.progressBar);
-
+//        mSwipeRefreshLayout.setChildView(mListView);
         getBelleImages();
+        progressBar.setVisibility(View.VISIBLE);
         return view;
     }
 
     @Override
     public void Success(String s, Integer mode) throws JSONException {
+        mSwipeRefreshLayout.setRefreshing(false);
         progressBar.setVisibility(View.GONE);
         switch (mode){
             case 1:
@@ -78,10 +92,11 @@ public class FirstFragment extends Fragment implements ResponseSuccess{
      */
     private void getBelleImages(){
 
-        progressBar.setVisibility(View.VISIBLE);
         Map<String,String> map=new HashMap<>();
-        map.put("num",""+num);
-        VolleyApplication.getInstance().getHttpUtils(this).get(URL, 1, map);
+        map.put("classify",""+num);
+        map.put("id","1");
+        map.put("rows","20");
+        VolleyApplication.getInstance().getHttpUtils(this).get(Contants.IMAGE_NEW, 1, map);
     }
 
 
@@ -91,18 +106,22 @@ public class FirstFragment extends Fragment implements ResponseSuccess{
      * @throws JSONException
      */
     private void initDate(final String s) throws JSONException {
-        JSONObject array = new JSONObject(s);
+        JSONObject objectString = new JSONObject(s);
+        JSONArray array=objectString.getJSONArray("tngou");
         lvs = new ArrayList<>();
-        for (int i = 0; i < num; i++) {
-            Item item=new Item();
-            item.setTitle(array.getJSONObject("" + i).getString("title"));
-            item.setDescription(array.getJSONObject("" + i).getString("description"));
-            item.setPicUrl(array.getJSONObject("" + i).getString("picUrl"));
-            item.setUrl(array.getJSONObject("" + i).getString("url"));
+        for (int i = 0; i < array.length(); i++) {
+            GroupImage item=new GroupImage();
+            item.setTitle(array.getJSONObject(i).getString("title"));
+            item.setId(array.getJSONObject(i).getString("id"));
+            item.setImg(array.getJSONObject(i).getString("img"));
             lvs.add(item);
 
         }
-        mAdapter.clearApplications();
+        if(num==1){
+            mAdapter.clearApplications();
+
+        }
+        num++;
         mAdapter.addApplications(lvs);
 
     }
@@ -114,14 +133,12 @@ public class FirstFragment extends Fragment implements ResponseSuccess{
      * @param image
      */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    public void animateActivity(Item appInfo, View appIcon,String image) {
+    public void animateActivity(GroupImage appInfo, View appIcon,String image) {
         Intent i = new Intent(getActivity(), ImageViewActivity.class);
         ArrayList<String> images=new ArrayList<>();
         images.add(image);
-        i.putExtra("imgList",images);
-//        i.putExtra("appInfo", appInfo.getComponentName());
-//        ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, Pair.create((View) mFabButton, "fab"), Pair.create(appIcon, "appIcon"));
-
+        i.putExtra("imgList", images);
+        i.putExtra("id",appInfo.getId());
         ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), Pair.create(appIcon, "appIcon"));
         getActivity().startActivity(i, transitionActivityOptions.toBundle());
     }

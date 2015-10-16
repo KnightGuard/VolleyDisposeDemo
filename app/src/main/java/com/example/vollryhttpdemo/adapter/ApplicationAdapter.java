@@ -10,17 +10,19 @@ import android.widget.TextView;
 import com.example.vollryhttpdemo.R;
 import com.example.vollryhttpdemo.VolleyApplication;
 import com.example.vollryhttpdemo.fragment.FirstFragment;
+import com.example.vollryhttpdemo.model.GroupImage;
 import com.example.vollryhttpdemo.model.Item;
+import com.example.vollryhttpdemo.utils.Contants;
 
 import java.util.List;
 
 public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.ViewHolder> {
 
-    private List<Item> applications;
+    private List<GroupImage> applications;
     private int rowLayout;
     private FirstFragment mAct;
 
-    public ApplicationAdapter(List<Item> applications, int rowLayout, FirstFragment act) {
+    public ApplicationAdapter(List<GroupImage> applications, int rowLayout, FirstFragment act) {
         this.applications = applications;
         this.rowLayout = rowLayout;
         this.mAct = act;
@@ -37,7 +39,7 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
         }
     }
 
-    public void addApplications(List<Item> applications) {
+    public void addApplications(List<GroupImage> applications) {
         this.applications.addAll(applications);
         this.notifyItemRangeInserted(0, applications.size() - 1);
     }
@@ -50,14 +52,14 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
 
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, int i) {
-        final Item appInfo = applications.get(i);
+        final GroupImage appInfo = applications.get(i);
         viewHolder.name.setText(appInfo.getTitle());
-        VolleyApplication.getInstance().settingImg(appInfo.getPicUrl(), viewHolder.image,null);
+        VolleyApplication.getInstance().settingImg(Contants.PREFIX+ appInfo.getImg(), viewHolder.image,null);
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAct.animateActivity(appInfo, viewHolder.image,appInfo.getPicUrl());
+                mAct.animateActivity(appInfo, viewHolder.image,appInfo.getImg());
             }
         });
     }
