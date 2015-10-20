@@ -19,14 +19,25 @@ import android.widget.ListView;
 
 import com.example.vollryhttpdemo.fragment.FirstFragment;
 import com.example.vollryhttpdemo.fragment.SecondFragment;
+import com.example.vollryhttpdemo.model.GroupImage;
+import com.example.vollryhttpdemo.utils.Contants;
+import com.example.vollryhttpdemo.utils.HttpUtils;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
-public class MainActivity extends BaseActivity implements AdapterView.OnItemClickListener {
+public class MainActivity extends BaseActivity implements AdapterView.OnItemClickListener,HttpUtils.ResponseSuccess{
     //声明相关变量
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private ListView lvLeftMenu;
-    private String[] lvs = {"List Item 01", "List Item 02", "List Item 03", "List Item 04"};
     private ArrayAdapter arrayAdapter;
     private  FragmentTransaction ft;
 
@@ -51,13 +62,22 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
         };
         mDrawerToggle.syncState();
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+        getBelleImageslist();
+    }
+    /**
+     * 设置菜单适配器
+     */
+    private void setMenuDate(List<String> lvs) {
         //设置菜单列表
+
         arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, lvs);
         lvLeftMenu.setAdapter(arrayAdapter);
         lvLeftMenu.setOnItemClickListener(this);
         checkFragment(0);
     }
-
+    /**
+     * 配置视图ID
+     */
     private void findViews() {
         toolbar = (Toolbar) findViewById(R.id.tl_custom);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.dl_left);
@@ -75,24 +95,7 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
     private void checkFragment(int position){
         //根据item点击行号判断启用哪个Fragment
         ft = getSupportFragmentManager().beginTransaction();
-        Fragment fragment = null;
-        switch (position)
-        {
-            case 0:
-                fragment = new FirstFragment();
-                break;
-            case 1:
-                fragment = new FirstFragment();
-                break;
-            case 2:
-                fragment = new FirstFragment();
-                break;
-            case 3:
-                fragment = new FirstFragment();
-                break;
-            default:
-                break;
-        }
+        Fragment fragment = FirstFragment.newInstance(position);
         ft.replace(R.id.fragment_layout, fragment);
         ft.commit();
         mDrawerLayout.closeDrawers();
@@ -106,5 +109,36 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true); //设置返回键可用
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    /**
+     * 拿到开放api的美女图片列表分类
+     */
+    private void getBelleImageslist(){
+        Map<String,String> map=new HashMap<>();
+        VolleyApplication.getInstance().getHttpUtils(this).get(Contants.IMAGE_CLASSIFY, 1, map);
+    }
+    @Override
+    public void Success(String s, Integer mode) throws JSONException {
+        if(mode==1){
+            initDate(s);
+        }
+    }
+    /**
+     * 处理返回数据
+     * @param s
+     * @throws JSONException
+     */
+    private void initDate(final String s) throws JSONException {
+        JSONArray objectArry = new JSONArray(s);
+        List<String> lvs = new ArrayList<>();
+        for (int i = 0; i < objectArry.length(); i++) {
+            lvs.add(objectArry.getJSONObject(i).getString("title"));
+        }
+        setMenuDate(lvs);
+    }
+    @Override
+    public void Error() {
+
     }
 }

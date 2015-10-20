@@ -10,6 +10,7 @@ import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,7 +72,18 @@ public class FirstFragment extends Fragment implements ResponseSuccess{
         progressBar.setVisibility(View.VISIBLE);
         return view;
     }
-
+    /**
+     * 构造获取实例
+     *
+     * @param id
+     */
+    public static FirstFragment newInstance(int id) {
+        FirstFragment fragment = new FirstFragment();
+        Bundle args = new Bundle();
+        args.putInt("id", id);
+        fragment.setArguments(args);
+        return fragment;
+    }
     @Override
     public void Success(String s, Integer mode) throws JSONException {
         mSwipeRefreshLayout.setRefreshing(false);
@@ -93,10 +105,11 @@ public class FirstFragment extends Fragment implements ResponseSuccess{
     private void getBelleImages(){
 
         Map<String,String> map=new HashMap<>();
-        map.put("classify",""+num);
-        map.put("id","1");
-        map.put("rows","20");
-        VolleyApplication.getInstance().getHttpUtils(this).get(Contants.IMAGE_NEW, 1, map);
+        map.put("page",""+num);
+        map.put("id",""+getArguments().getInt("id"));
+        map.put("rows", "20");
+        Log.i("main","请求参数"+map.toString());
+        VolleyApplication.getInstance().getHttpUtils(this).get(Contants.IMAGE_LIST, 1, map);
     }
 
 
