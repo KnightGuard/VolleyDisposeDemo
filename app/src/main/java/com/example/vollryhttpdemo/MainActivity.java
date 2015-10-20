@@ -104,7 +104,7 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
      * 初始化Toolbar
      */
     private void initToolbar(){
-        toolbar.setTitle("Toolbar");//设置Toolbar标题
+        toolbar.setTitle("美女图库");//设置Toolbar标题
         toolbar.setTitleTextColor(Color.parseColor("#ffffff")); //设置标题颜色
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true); //设置返回键可用
