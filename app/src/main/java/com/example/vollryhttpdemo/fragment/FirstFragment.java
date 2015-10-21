@@ -128,11 +128,9 @@ public class FirstFragment extends Fragment implements ResponseSuccess{
             item.setId(array.getJSONObject(i).getString("id"));
             item.setImg(array.getJSONObject(i).getString("img"));
             lvs.add(item);
-
         }
         if(num==1){
             mAdapter.clearApplications();
-
         }
         num++;
         mAdapter.addApplications(lvs);
