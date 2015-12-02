@@ -4,15 +4,14 @@
     <file url="file://$PROJECT_DIR$/app/libs/gson-2.2.4.jar" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/libs/jpush-sdk-release1.7.5.jar" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/libs/universal-image-loader-1.9.1-with-sources.jar" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/libs/volley.jar" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/vollryhttpdemo/VolleyApplication.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/vollryhttpdemo/adapter/ApplicationAdapter.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/vollryhttpdemo/custom/CustomToast.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/vollryhttpdemo/custom/itemanimator/CustomItemAnimator.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/vollryhttpdemo/custom/itemanimator/ReboundItemAnimator.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/vollryhttpdemo/network/HttpUtils.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/vollryhttpdemo/utils/DeviceUuid.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/vollryhttpdemo/utils/DialogUtils.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/vollryhttpdemo/utils/HttpUtils.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-v21" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/button_rect_list_normal.xml" charset="GBK" />
     <file url="PROJECT" charset="UTF-8" />

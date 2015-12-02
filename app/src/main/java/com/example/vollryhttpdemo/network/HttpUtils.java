@@ -1,14 +1,15 @@
-package com.example.vollryhttpdemo.utils;
+package com.example.vollryhttpdemo.network;
 
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request.Method;
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.vollryhttpdemo.VolleyApplication;
+import com.example.vollryhttpdemo.utils.DialogUtils;
 
 import org.json.JSONException;
 
@@ -53,7 +54,7 @@ public class HttpUtils {
 	 */
 	public void postBody(final String url, Integer mode,final String body) {
 
-		VolleyApplication.getInstance().getRequestQueue().add(new StringRequest(Method.POST, url, new MySuccessListener(mode), new MyErrorListener()) {
+		VolleyApplication.getInstance().getRequestQueue().add(new StringRequest(Request.Method.POST, url, new MySuccessListener(mode), new MyErrorListener()) {
 			@Override
 			public byte[] getBody() throws AuthFailureError {
 				return body == null ? super.getBody() : body.getBytes();

@@ -25,7 +25,7 @@ import com.example.vollryhttpdemo.custom.itemanimator.CustomItemAnimator;
 import com.example.vollryhttpdemo.custom.itemanimator.ReboundItemAnimator;
 import com.example.vollryhttpdemo.model.GroupImage;
 import com.example.vollryhttpdemo.utils.Contants;
-import com.example.vollryhttpdemo.utils.HttpUtils.ResponseSuccess;
+import com.example.vollryhttpdemo.network.HttpUtils.ResponseSuccess;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -2,14 +2,9 @@ package com.example.vollryhttpdemo;
 
 import android.animation.Animator;
 import android.annotation.TargetApi;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,17 +12,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.example.vollryhttpdemo.custom.TouchImageView;
-import com.example.vollryhttpdemo.model.GroupImage;
 import com.example.vollryhttpdemo.utils.Contants;
-import com.example.vollryhttpdemo.utils.HttpUtils;
+import com.example.vollryhttpdemo.network.HttpUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;

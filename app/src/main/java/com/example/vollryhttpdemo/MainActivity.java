@@ -1,31 +1,22 @@
 package com.example.vollryhttpdemo;
 
-import android.content.Context;
 import android.graphics.Color;
-import android.os.Build;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.vollryhttpdemo.fragment.FirstFragment;
-import com.example.vollryhttpdemo.fragment.SecondFragment;
-import com.example.vollryhttpdemo.model.GroupImage;
 import com.example.vollryhttpdemo.utils.Contants;
-import com.example.vollryhttpdemo.utils.HttpUtils;
+import com.example.vollryhttpdemo.network.HttpUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -116,6 +107,7 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
      */
     private void getBelleImageslist(){
         Map<String,String> map=new HashMap<>();
+
         VolleyApplication.getInstance().getHttpUtils(this).get(Contants.IMAGE_CLASSIFY, 1, map);
     }
     @Override
