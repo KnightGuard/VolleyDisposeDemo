@@ -9,7 +9,8 @@ import android.widget.ProgressBar;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.example.vollryhttpdemo.network.HttpUtils;
+import com.example.vollryhttpdemo.network.RequestFactory;
+import com.example.vollryhttpdemo.network.RequestManager;
 import com.google.gson.Gson;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.UsingFreqLimitedMemoryCache;
@@ -27,9 +28,9 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 public class VolleyApplication extends Application{
 
     private static VolleyApplication sInstance;//app入口本身
-    private  RequestQueue queues;//volley请求
+
     private  DisplayImageOptions options;//tImageLoader图片加载配置
-    private HttpUtils httpUtils;//基于volley二次封装的请求工具类
+//    private RequestManager httpUtils;//基于volley二次封装的请求工具类
     private  Gson gson;//格式化转换数据第三方工具类
     private ImageLoader mImageLoader;
     @Override
@@ -39,7 +40,7 @@ public class VolleyApplication extends Application{
 //        JPushInterface.init(this);
 //        // 设置调试模式, 可以在 LogCat 中查看 JPush 日志
 //        JPushInterface.setDebugMode(true);
-        queues = Volley.newRequestQueue(getApplicationContext());
+        RequestFactory.getInstance().init(this);
         initImageLoader(getApplicationContext());
     }
 
@@ -118,30 +119,8 @@ public class VolleyApplication extends Application{
         }
         return this.mImageLoader;
     }
-    /**
-     * @return Volley
-     */
-    public RequestQueue getRequestQueue() {
 
-        if (queues == null) {
-            queues = Volley.newRequestQueue(getApplicationContext(),
-                    null);
-        }
-        return queues;
-    }
 
-    /**
-     * 获取请求工具类
-     * @return
-     */
-    public HttpUtils getHttpUtils(HttpUtils.ResponseSuccess success) {
-
-//        if (httpUtils == null) {
-            httpUtils = new HttpUtils();
-            httpUtils.setResponseSuccess(success);
-//        }
-        return httpUtils;
-    }
     /**
      * 获取GSON
      * @return

@@ -12,8 +12,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.vollryhttpdemo.fragment.FirstFragment;
+import com.example.vollryhttpdemo.network.RequestFactory;
 import com.example.vollryhttpdemo.utils.Contants;
-import com.example.vollryhttpdemo.network.HttpUtils;
+import com.example.vollryhttpdemo.network.RequestManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class MainActivity extends BaseActivity implements AdapterView.OnItemClickListener,HttpUtils.ResponseSuccess{
+public class MainActivity extends BaseActivity implements AdapterView.OnItemClickListener,RequestManager.ResponseSuccess{
     //声明相关变量
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -107,14 +108,7 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
      */
     private void getBelleImageslist(){
         Map<String,String> map=new HashMap<>();
-
-        VolleyApplication.getInstance().getHttpUtils(this).get(Contants.IMAGE_CLASSIFY, 1, map);
-    }
-    @Override
-    public void Success(String s, Integer mode) throws JSONException {
-        if(mode==1){
-            initDate(s);
-        }
+        RequestFactory.getInstance().getBelleImageslist(this);
     }
     /**
      * 处理返回数据
@@ -129,8 +123,20 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
         }
         setMenuDate(lvs);
     }
+
     @Override
-    public void Error() {
+    public void Success(String response, int actionId) {
+        if(actionId==1){
+            try {
+                initDate(response);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void Error(int actionId) {
 
     }
 }

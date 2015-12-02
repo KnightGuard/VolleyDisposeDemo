@@ -9,7 +9,7 @@
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/vollryhttpdemo/custom/CustomToast.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/vollryhttpdemo/custom/itemanimator/CustomItemAnimator.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/vollryhttpdemo/custom/itemanimator/ReboundItemAnimator.java" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/vollryhttpdemo/network/HttpUtils.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/vollryhttpdemo/network/RequestManager.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/vollryhttpdemo/utils/DeviceUuid.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/vollryhttpdemo/utils/DialogUtils.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-v21" charset="GBK" />

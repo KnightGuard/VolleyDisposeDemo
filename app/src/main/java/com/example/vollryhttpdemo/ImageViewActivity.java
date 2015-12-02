@@ -16,8 +16,9 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.example.vollryhttpdemo.custom.TouchImageView;
+import com.example.vollryhttpdemo.network.RequestFactory;
 import com.example.vollryhttpdemo.utils.Contants;
-import com.example.vollryhttpdemo.network.HttpUtils;
+import com.example.vollryhttpdemo.network.RequestManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,7 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ImageViewActivity extends BaseActivity implements HttpUtils.ResponseSuccess {
+public class ImageViewActivity extends BaseActivity implements RequestManager.ResponseSuccess {
 
 	private ArrayList<String> imgList = new ArrayList<>();
 	private ViewPager imgPager;
@@ -51,16 +52,20 @@ public class ImageViewActivity extends BaseActivity implements HttpUtils.Respons
 	}
 
 	@Override
-	public void Success(String s, Integer mode) throws JSONException {
-		switch (mode){
+	public void Success(String response, int actionId) {
+		switch (actionId){
 			case 1:
-				initDate(s);
+				try {
+					initDate(response);
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
 				break;
 		}
 	}
 
 	@Override
-	public void Error() {
+	public void Error(int actionId) {
 
 	}
 
@@ -84,10 +89,7 @@ public class ImageViewActivity extends BaseActivity implements HttpUtils.Respons
 	 * 拿到开放api的美女图片详情
 	*/
 	private void getBelleImagesDetails(){
-		Map<String,String> map=new HashMap<>();
-		map.put("id",getIntent().getStringExtra("id"));
-		VolleyApplication.getInstance().getHttpUtils(this).get(Contants.IMAGE_NEW_SHOW, 1, map);
-
+		RequestFactory.getInstance().getBelleImagesDetails(this, getIntent().getStringExtra("id"));
 	}
 
 	private class ImageAdapter extends PagerAdapter {

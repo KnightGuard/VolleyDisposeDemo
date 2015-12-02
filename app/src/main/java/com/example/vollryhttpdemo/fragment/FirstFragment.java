@@ -19,13 +19,14 @@ import android.widget.ProgressBar;
 
 import com.example.vollryhttpdemo.ImageViewActivity;
 import com.example.vollryhttpdemo.R;
-import com.example.vollryhttpdemo.VolleyApplication;
 import com.example.vollryhttpdemo.adapter.ApplicationAdapter;
 import com.example.vollryhttpdemo.custom.itemanimator.CustomItemAnimator;
 import com.example.vollryhttpdemo.custom.itemanimator.ReboundItemAnimator;
 import com.example.vollryhttpdemo.model.GroupImage;
+import com.example.vollryhttpdemo.network.RequestFactory;
+import com.example.vollryhttpdemo.network.RequestManager;
 import com.example.vollryhttpdemo.utils.Contants;
-import com.example.vollryhttpdemo.network.HttpUtils.ResponseSuccess;
+import com.example.vollryhttpdemo.network.RequestManager.ResponseSuccess;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -84,32 +85,37 @@ public class FirstFragment extends Fragment implements ResponseSuccess{
         fragment.setArguments(args);
         return fragment;
     }
+
     @Override
-    public void Success(String s, Integer mode) throws JSONException {
+    public void Success(String response, int actionId) {
         mSwipeRefreshLayout.setRefreshing(false);
         progressBar.setVisibility(View.GONE);
-        switch (mode){
+        switch (actionId){
             case 1:
-                initDate(s);
+                try {
+                    initDate(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 break;
         }
     }
 
     @Override
-    public void Error() {
+    public void Error(int actionId) {
         progressBar.setVisibility(View.GONE);
     }
     /**
      * 拿到开放api的美女图片集
      */
     private void getBelleImages(){
-
         Map<String,String> map=new HashMap<>();
         map.put("page",""+num);
         map.put("id",""+getArguments().getInt("id"));
         map.put("rows", "20");
-        Log.i("main","请求参数"+map.toString());
-        VolleyApplication.getInstance().getHttpUtils(this).get(Contants.IMAGE_LIST, 1, map);
+        Log.i("main", "请求参数" + map.toString());
+//        RequestManager.getInstance().get(Contants.IMAGE_LIST, map, this, 1);
+        RequestFactory.getInstance().getBelleImages(this, num, getArguments().getInt("id"),20);
     }
 
 
