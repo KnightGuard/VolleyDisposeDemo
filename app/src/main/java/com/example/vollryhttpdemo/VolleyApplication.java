@@ -37,9 +37,7 @@ public class VolleyApplication extends Application{
     public void onCreate() {
         super.onCreate();
         sInstance = this;
-//        JPushInterface.init(this);
-//        // 设置调试模式, 可以在 LogCat 中查看 JPush 日志
-//        JPushInterface.setDebugMode(true);
+        /**  初始化请求发生器工厂  */
         RequestFactory.getInstance().init(this);
         initImageLoader(getApplicationContext());
     }
