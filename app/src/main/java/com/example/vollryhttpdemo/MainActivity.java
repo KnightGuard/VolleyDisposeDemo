@@ -18,6 +18,7 @@ import com.example.vollryhttpdemo.network.RequestManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -116,7 +117,8 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
      * @throws JSONException
      */
     private void initDate(final String s) throws JSONException {
-        JSONArray objectArry = new JSONArray(s);
+        JSONObject jsonObject = new JSONObject(s);
+        JSONArray objectArry = new JSONArray(jsonObject.getString("tngou"));
         List<String> lvs = new ArrayList<>();
         for (int i = 0; i < objectArry.length(); i++) {
             lvs.add(objectArry.getJSONObject(i).getString("title"));
