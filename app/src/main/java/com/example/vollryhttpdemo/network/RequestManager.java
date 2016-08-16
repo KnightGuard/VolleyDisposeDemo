@@ -10,6 +10,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import java.io.UnsupportedEncodingException;
@@ -67,12 +68,12 @@ public class RequestManager {
 		sendRequest( Request.Method.POST, url, null, body, actionId, true, 0, 20* 1000, responseSuccess);
 	}
 	/**
-	 * Post
-	 * @param url
-	 * @param actionId
-	 * @param body
-	 * @param responseSuccess
-	 */
+	* Post
+	* @param url
+	* @param actionId
+	* @param body
+	* @param responseSuccess
+	*/
 	public void postHeaderBody(final String url, Map<String, String> header,final String body,ResponseSuccess responseSuccess,int actionId) {
 		sendRequest( Request.Method.POST, url, header, body, actionId, true, 0, 20* 1000, responseSuccess);
 	}
@@ -129,7 +130,15 @@ public class RequestManager {
 						cookies = session;
 					}
 				}
-				return superResponse;
+				String str = null;
+				try {
+					str = new String(response.data,"utf-8");
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return Response.success(str, HttpHeaderParser.parseCacheHeaders(response));
+//				return superResponse;
 			}
 			@Override
 			public String getBodyContentType() {

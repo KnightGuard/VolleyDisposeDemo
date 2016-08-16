@@ -9,6 +9,7 @@ import android.widget.ProgressBar;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.baidu.apistore.sdk.ApiStoreSDK;
 import com.example.vollryhttpdemo.network.RequestFactory;
 import com.example.vollryhttpdemo.network.RequestManager;
 import com.google.gson.Gson;
@@ -37,6 +38,7 @@ public class VolleyApplication extends Application{
     public void onCreate() {
         super.onCreate();
         sInstance = this;
+        ApiStoreSDK.init(this, "337020e557227243748205369d73ac48");
         /**  初始化请求发生器工厂  */
         RequestFactory.getInstance().init(this);
         initImageLoader(getApplicationContext());
@@ -88,8 +90,7 @@ public class VolleyApplication extends Application{
             }
 
             @Override
-            public void onLoadingFailed(String arg0, View arg1,
-                                        FailReason arg2) {
+            public void onLoadingFailed(String arg0, View arg1, FailReason arg2) {
                 //加载失败
             }
 

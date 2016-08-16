@@ -116,24 +116,28 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
      * @param s
      * @throws JSONException
      */
-    private void initDate(final String s) throws JSONException {
-        JSONObject jsonObject = new JSONObject(s);
-        JSONArray objectArry = new JSONArray(jsonObject.getString("tngou"));
-        List<String> lvs = new ArrayList<>();
-        for (int i = 0; i < objectArry.length(); i++) {
-            lvs.add(objectArry.getJSONObject(i).getString("title"));
+    private void initDate(final String s) {
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(s);
+            JSONArray objectArry = new JSONArray(jsonObject.getString("tngou"));
+            List<String> lvs = new ArrayList<>();
+            for (int i = 0; i < objectArry.length(); i++) {
+                lvs.add(objectArry.getJSONObject(i).getString("title"));
+            }
+            setMenuDate(lvs);
+        } catch (JSONException e) {
+            RequestFactory.getInstance().getBelleImageslist(this);
+            e.printStackTrace();
         }
-        setMenuDate(lvs);
+
+
     }
 
     @Override
     public void Success(String response, int actionId) {
         if(actionId==1){
-            try {
-                initDate(response);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            initDate(response);
         }
     }
 
